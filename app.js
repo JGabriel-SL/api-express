@@ -33,7 +33,7 @@ app.post('/pedidos', async (req, res) => {
   let valorFinal = valorTotal;
   if (usuario.tipo === "VIP") {
     valorFinal = valorTotal * 0.90; 
-      valorFinal = valorFinal - 50; 
+    valorFinal = valorFinal - 50; 
   }
 
   
@@ -47,6 +47,10 @@ app.post('/pedidos', async (req, res) => {
     let frete = 20;
     if (response.data.uf === "SP") {
       frete = 5; 
+    }
+
+    if (response.data.uf === "CE") {
+      frete = 40; 
     }
     
     valorFinal += frete;
