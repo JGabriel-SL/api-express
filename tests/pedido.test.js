@@ -1,8 +1,7 @@
 const request = require('supertest');
 const axios = require('axios');
-const app = require('../src/app');// Certifique-se de que o caminho para o app.js está correto
+const app = require('../src/app.js');
 
-// Mockando o axios para não fazer requisições reais à internet durante os testes
 jest.mock('axios');
 
 describe('Testes de Integração - Endpoints de Pedidos', () => {
