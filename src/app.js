@@ -31,17 +31,17 @@ let usuarios = [
 ];
 
 let pedidos = [
-  { id: 1, usuarioId: 1, valorFinal: 85.00, status: ORDER_STATUS_APPROVED },  
-  { id: 2, usuarioId: 2, valorFinal: 105.00, status: ORDER_STATUS_APPROVED }, 
-  { id: 3, usuarioId: 99, valorFinal: 30.00, status: ORDER_STATUS_APPROVED }  
+  { id: 1, usuarioId: 1, valorFinal: 85.00, status: ORDER_STATUS_APPROVED },
+  { id: 2, usuarioId: 2, valorFinal: 105.00, status: ORDER_STATUS_APPROVED },
+  { id: 3, usuarioId: 99, valorFinal: 30.00, status: ORDER_STATUS_APPROVED }
 ];
 
 // --- Helper Functions ---
 const calculateFinalOrderValue = (valorTotal, userType) => {
   let valorFinal = valorTotal;
   if (userType === USER_TYPE_VIP) {
-    valorFinal = valorTotal * (1 - VIP_DISCOUNT_PERCENTAGE); 
-    valorFinal -= VIP_ADDITIONAL_DISCOUNT; 
+    valorFinal = valorTotal * (1 - VIP_DISCOUNT_PERCENTAGE);
+    valorFinal -= VIP_ADDITIONAL_DISCOUNT;
   }
   return valorFinal;
 };
@@ -49,14 +49,14 @@ const calculateFinalOrderValue = (valorTotal, userType) => {
 const getFreightCost = async (cepDestino) => {
   try {
     const response = await axios.get(`${VIACEP_API_URL}/${cepDestino}/json/`);
-    
+
     if (response.data.erro) {
       throw new Error("CEP inválido");
     }
 
     const uf = response.data.uf;
     const frete = FREIGHT_RATES[uf] !== undefined ? FREIGHT_RATES[uf] : DEFAULT_FREIGHT;
-    
+
     return frete;
 
   } catch (error) {
@@ -83,7 +83,7 @@ app.post('/pedidos', async (req, res) => {
   }
 
   let valorFinal = calculateFinalOrderValue(valorTotal, usuario.tipo);
-  
+
   try {
     const frete = await getFreightCost(cepDestino);
     valorFinal += frete;
@@ -110,13 +110,13 @@ app.post('/pedidos', async (req, res) => {
 
 app.get('/pedidos/:id', (req, res) => {
   const pedido = pedidos.find(p => p.id === parseInt(req.params.id));
-  
+
   if (!pedido) {
     return res.status(404).json({ erro: "Pedido não encontrado" });
   }
 
-  const donoPedido = usuarios.find(u => u.id === pedido.usuarioId); 
-  
+  const donoPedido = usuarios.find(u => u.id === pedido.usuarioId);
+
   if (!donoPedido) {
     return res.status(404).json({ erro: "Dono do pedido não encontrado" });
   }
